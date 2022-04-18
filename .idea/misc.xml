@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/activity_news.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/fragment_article.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/fragment_top_headline_news.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

@@ -5,7 +5,7 @@ import com.example.palesnews.data.pojo.Article
 import com.example.palesnews.data.remote.NewsApi
 import javax.inject.Inject
 
-class ArticlesRepository @Inject constructor(
+class ArticlesRepository (
     private val newsApi: NewsApi,
     private val articlesDatabase: ArticlesDatabase
 ) {
@@ -38,9 +38,12 @@ class ArticlesRepository @Inject constructor(
         article: Article
     ) = articlesDao.deleteArticle(article)
 
+    suspend fun deleteAllArticles() = articlesDao.deleteAllArticles()
+
     fun getAllArticles() = articlesDao.getAllArticles()
 
     fun getArticlesByCategory (
         category:String
     ) = articlesDao.getArticlesByCategory(category)
+
 }

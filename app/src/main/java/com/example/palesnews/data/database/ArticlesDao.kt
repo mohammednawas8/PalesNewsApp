@@ -20,4 +20,8 @@ interface ArticlesDao {
     @Transaction
     @Query("SELECT * FROM Article" + " WHERE category = :category order by publishedAt")
     fun getArticlesByCategory(category: String): LiveData<List<Article>>
+
+    @Transaction
+    @Query("DELETE FROM Article")
+    suspend fun deleteAllArticles()
 }

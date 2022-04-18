@@ -1,6 +1,7 @@
 package com.example.palesnews.data.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -10,10 +11,11 @@ import com.example.palesnews.util.Constants.Companion.DATABASE_NAME
 
 @Database(
     entities = [Article::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(ArticlesTypeConverters::class)
 abstract class ArticlesDatabase : RoomDatabase() {
+
     abstract val articlesDao: ArticlesDao
 
     companion object {
@@ -21,16 +23,17 @@ abstract class ArticlesDatabase : RoomDatabase() {
         private var articlesDatabase: ArticlesDatabase? = null
 
         @Synchronized
-        fun getArticlesDatabaseInstance(context: Context): RoomDatabase {
+        fun getArticlesDatabaseInstance(context: Context): ArticlesDatabase {
             synchronized(this) {
-                articlesDatabase?.let {
-                    Room.databaseBuilder(
+                if (articlesDatabase == null){
+                    articlesDatabase = Room.databaseBuilder(
                         context,
                         ArticlesDatabase::class.java,
                         DATABASE_NAME
                     ).fallbackToDestructiveMigration()
                         .build()
                 }
+
                 return articlesDatabase as ArticlesDatabase
             }
         }

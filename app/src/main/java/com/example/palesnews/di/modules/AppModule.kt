@@ -3,6 +3,8 @@ package com.example.palesnews.di.modules
 import android.content.Context
 import com.example.palesnews.data.database.ArticlesDatabase
 import com.example.palesnews.data.remote.NewsApi
+import com.example.palesnews.helper.ArticlesCache
+import com.example.palesnews.repositories.ArticlesRepository
 import com.example.palesnews.util.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -29,7 +31,20 @@ object AppModule {
     @Singleton
     fun provideArticlesDatabase(
         @ApplicationContext context:Context
-    ) = ArticlesDatabase.getArticlesDatabaseInstance(context)
+    ) : ArticlesDatabase = ArticlesDatabase.getArticlesDatabaseInstance(context)
 
+
+    @Provides
+    @Singleton
+    fun provideArticlesRepository(
+        newsApi: NewsApi,
+        articlesDatabase: ArticlesDatabase
+    ) = ArticlesRepository(newsApi,articlesDatabase)
+
+    @Provides
+    @Singleton
+    fun provideArticlesCacheObject(
+        repository: ArticlesRepository
+    ) = ArticlesCache(repository)
 
 }
