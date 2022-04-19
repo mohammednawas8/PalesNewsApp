@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="article_image_width">120dp</dimen>
+    <dimen name="article_image_height">80dp</dimen>
+    <dimen name="image_corner_radius">20dp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="text_margin">20dp</dimen>
+    <dimen name="line_width">1dp</dimen>
+    <dimen name="category_button_corners">200dp</dimen>
+    <dimen name="category_button_width">140dp</dimen>
+    <dimen name="category_button_height">60dp</dimen>
+    <dimen name="text_choose_topics">40sp</dimen>
+    <dimen name="categories_top_margin">20dp</dimen>
+    <dimen name="featured_article_height">270dp</dimen>
+    <dimen name="featured_article_corner">45dp</dimen>
+
+</resources>

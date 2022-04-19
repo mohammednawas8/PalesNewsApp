@@ -24,4 +24,7 @@ interface ArticlesDao {
     @Transaction
     @Query("DELETE FROM Article")
     suspend fun deleteAllArticles()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertArticles(articles:List<Article>)
 }

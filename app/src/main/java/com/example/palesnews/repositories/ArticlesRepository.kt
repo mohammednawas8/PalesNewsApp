@@ -32,7 +32,7 @@ class ArticlesRepository (
 
     suspend fun insertListOfArticles(
         articles:List<Article>
-    ) = articles.forEach { articlesDao.upsertArticle(it) }
+    ) = articlesDao.upsertArticles(articles)
 
     suspend fun deleteArticle(
         article: Article

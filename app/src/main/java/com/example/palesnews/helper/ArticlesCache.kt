@@ -8,6 +8,6 @@ class ArticlesCache(
 ) {
     suspend fun updateArticlesCacheStatues(articles: List<Article>) {
         repository.deleteAllArticles()
-        articles.forEach { repository.insertArticle(it) }
+        repository.insertListOfArticles(articles)
     }
 }

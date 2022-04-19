@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="g_bold_text_color">#26325B</color>
+    <color name="g_app_background">#EEF0F9</color>
+    <color name="g_line_color">#22858EAC</color>
+    <color name="g_orange">#FFA200</color>
+    <color name="g_red">#FF5500</color>
+    <color name="g_blue">#2D5FFF</color>
+    <color name="g_green">#5BFF2D</color>
 </resources>

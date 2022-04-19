@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">PalesNews</string>
+    <string name="test_text">Lunch Break angels swing above mmters passing Lunch Break angels swing above mmters passing</string>
+    <string name="test_text2">2 Min read | 26 oct</string>
+    <string name="read_time">Min read</string>
+    <string name="business">Business</string>
+    <string name="general">General</string>
+    <string name="since">Since</string>
+    <string name="sports">Sports</string>
+    <string name="choose_topics">Choose your \n topics</string>
+    <string name="featured_article">Featured Article</string>
+    <string name="top_headlines">Top Headlines</string>
 </resources>

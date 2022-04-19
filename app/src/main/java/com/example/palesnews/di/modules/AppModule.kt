@@ -1,6 +1,10 @@
 package com.example.palesnews.di.modules
 
 import android.content.Context
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.example.palesnews.R
 import com.example.palesnews.data.database.ArticlesDatabase
 import com.example.palesnews.data.remote.NewsApi
 import com.example.palesnews.helper.ArticlesCache
@@ -21,7 +25,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNewsApi() : NewsApi = Retrofit.Builder()
+    fun provideNewsApi(): NewsApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -30,8 +34,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideArticlesDatabase(
-        @ApplicationContext context:Context
-    ) : ArticlesDatabase = ArticlesDatabase.getArticlesDatabaseInstance(context)
+        @ApplicationContext context: Context
+    ): ArticlesDatabase = ArticlesDatabase.getArticlesDatabaseInstance(context)
 
 
     @Provides
@@ -39,12 +43,22 @@ object AppModule {
     fun provideArticlesRepository(
         newsApi: NewsApi,
         articlesDatabase: ArticlesDatabase
-    ) = ArticlesRepository(newsApi,articlesDatabase)
+    ) = ArticlesRepository(newsApi, articlesDatabase)
 
     @Provides
     @Singleton
     fun provideArticlesCacheObject(
         repository: ArticlesRepository
     ) = ArticlesCache(repository)
+
+    @Provides
+    @Singleton
+    fun provideGlide(
+        @ApplicationContext context: Context
+    ) = Glide.with(context).applyDefaultRequestOptions(RequestOptions()
+            .placeholder(R.drawable.loading)
+            .error(R.drawable.error_loading)
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
+    )
 
 }

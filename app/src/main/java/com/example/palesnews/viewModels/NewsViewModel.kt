@@ -1,5 +1,6 @@
 package com.example.palesnews.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,9 @@ class NewsViewModel @Inject constructor(
     private val articlesCache: ArticlesCache
 ) : ViewModel() {
 
+    init {
+        fetchTopHeadlineNews("us", 1)
+    }
 
     val topHeadlineNews = articlesRepository.getAllArticles()
 
@@ -32,7 +36,7 @@ class NewsViewModel @Inject constructor(
     fun fetchTopHeadlineNews(country: String, page: Int = topHeadlineNewsPage) =
         viewModelScope.launch {
             // In the Loading case - while fetching the news from the Server we will send the cached articles to the Ui
-            _topHeadlineNewsProgress.postValue(Resource.Loading())
+            _topHeadlineNewsProgress?.postValue(Resource.Loading())
             try {
                 val response = articlesRepository.fetchTopHeadlineNews(country, page)
                 handleNewsResponse(response)

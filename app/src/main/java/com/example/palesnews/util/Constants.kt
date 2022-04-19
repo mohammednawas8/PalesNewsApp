@@ -7,5 +7,10 @@ class Constants {
         const val SORT_BY_POPULARITY = "popularity"
         const val SORT_BY_RELEVANCY = "relevancy"
         const val DATABASE_NAME = "articles_db"
+
+        const val GENERAL = "general"
+        const val BUSINESS = "business"
+        const val SINCE = "science"
+        const val SPORTS = "sports"
     }
 }

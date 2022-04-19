@@ -7,24 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.example.palesnews.data.database.ArticlesDatabase
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.RequestManager
+import com.example.palesnews.adapters.ArticlesAdapter
+import com.example.palesnews.adapters.CategoriesAdapter
+import com.example.palesnews.data.pojo.Article
 import com.example.palesnews.databinding.FragmentTopHeadlineNewsBinding
 import com.example.palesnews.helper.ResourceResultHandler
-import com.example.palesnews.repositories.ArticlesRepository
-import com.example.palesnews.util.Resource
+import com.example.palesnews.util.Constants.Companion.BUSINESS
+import com.example.palesnews.util.Constants.Companion.GENERAL
+import com.example.palesnews.util.Constants.Companion.SINCE
+import com.example.palesnews.util.Constants.Companion.SPORTS
 import com.example.palesnews.viewModels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class TopHeadlineNewsFragment : Fragment() {
+    @Inject
+    lateinit var glide: RequestManager
     val TAG = "TopHeadlineNewsFragment"
     private lateinit var binding: FragmentTopHeadlineNewsBinding
     private val viewModel by activityViewModels<NewsViewModel>()
     lateinit var topHeadlineResultHandler: ResourceResultHandler
+    private lateinit var categoriesAdapter: CategoriesAdapter
+    private lateinit var articlesAdapter: ArticlesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,19 +45,24 @@ class TopHeadlineNewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fetchTopHeadlineNews("us", 1)
+        setupCategoriesRecyclerview()
+        setupArticlesRecyclerview()
+
 
         topHeadlineResultHandler = ResourceResultHandler(
             onLoading = {
-                Log.d(TAG, "Loading...")
+                Log.d(TAG, "TopHeadLines:Loading...")
+                showLoading()
             },
 
             onSuccess = {
-                Log.d(TAG, "Success :)")
+                Log.d(TAG, "TopHeadLines:Success :)")
+                hideLoading()
             },
 
             onError = {
-                Log.e(TAG, "Error :(")
+                Log.e(TAG, "TopHeadLines:Error :(")
+                hideLoading()
             }
         )
 
@@ -59,6 +71,51 @@ class TopHeadlineNewsFragment : Fragment() {
         }
 
         viewModel.topHeadlineNews.observe(viewLifecycleOwner) { articles ->
+            articlesAdapter.differ.submitList(articles)
+            // We will pick a random article and show it in the Featured Articles
+            val featuredArticle = articles.random()
+            setupFeaturedArticle(featuredArticle)
         }
+    }
+
+    private fun setupFeaturedArticle(featuredArticle: Article) {
+        glide.load(featuredArticle.urlToImage).into(binding.imgFeaturedArticle)
+        binding.tvOverImage.text = featuredArticle.title
+    }
+
+    private fun hideLoading() {
+        binding.progressbar.visibility = View.INVISIBLE
+    }
+
+    private fun showLoading() {
+        binding.progressbar.visibility = View.VISIBLE
+    }
+
+    private fun setupArticlesRecyclerview() {
+        articlesAdapter = ArticlesAdapter()
+        binding.rvTopHeadlines.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = articlesAdapter
+        }
+    }
+
+    private fun setupCategoriesRecyclerview() {
+        categoriesAdapter = CategoriesAdapter()
+        binding.rvCategories.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = categoriesAdapter
+        }
+        val categoriesList = getCategoriesList()
+        categoriesAdapter.setCategoriesList(categoriesList)
+    }
+
+    private fun getCategoriesList(): MutableList<String> {
+        return mutableListOf(
+            GENERAL,
+            BUSINESS,
+            SINCE,
+            SPORTS
+        )
+
     }
 }
