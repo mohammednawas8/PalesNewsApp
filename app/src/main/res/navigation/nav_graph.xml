@@ -13,11 +13,20 @@
         <action
             android:id="@+id/action_topHeadlineNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment"
-            />
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.example.palesnews.ui.fragments.ArticleFragment"
         android:label="ArticleFragment"
-        tools:layout="@layout/fragment_article"/>
+        tools:layout="@layout/fragment_article">
+        <argument
+            android:name="article"
+            app:argType="com.example.palesnews.data.pojo.Article" />
+        <argument android:name="time"
+            app:argType="string" />
+    </fragment>
 </navigation>

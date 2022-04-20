@@ -1,5 +1,6 @@
 package com.example.palesnews.helper
 
+import android.util.Log
 import com.example.palesnews.data.pojo.Article
 import com.example.palesnews.util.Resource
 
@@ -14,6 +15,7 @@ class ResourceResultHandler(
         when (result) {
             is Resource.Loading -> {
                 onLoading()
+                Log.d("tests","Loading...")
                 return
             }
 

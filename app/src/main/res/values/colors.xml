@@ -14,5 +14,6 @@
     <color name="g_orange">#FFA200</color>
     <color name="g_red">#FF5500</color>
     <color name="g_blue">#2D5FFF</color>
-    <color name="g_green">#5BFF2D</color>
+    <color name="g_green">#4DC62B</color>
+    <color name="g_content_text">#858EAC</color>
 </resources>

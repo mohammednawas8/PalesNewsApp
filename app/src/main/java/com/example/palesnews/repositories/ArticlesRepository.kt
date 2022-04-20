@@ -46,4 +46,6 @@ class ArticlesRepository (
         category:String
     ) = articlesDao.getArticlesByCategory(category)
 
+    suspend fun getRandomArticle() = articlesDao.getRandomArticle()
+
 }

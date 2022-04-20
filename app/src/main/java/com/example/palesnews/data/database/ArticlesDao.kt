@@ -14,11 +14,11 @@ interface ArticlesDao {
     suspend fun deleteArticle(article: Article)
 
     @Transaction
-    @Query("SELECT * FROM Article" + " order by publishedAt")
+    @Query("SELECT * FROM Article")
     fun getAllArticles(): LiveData<List<Article>>
 
     @Transaction
-    @Query("SELECT * FROM Article" + " WHERE category = :category order by publishedAt")
+    @Query("SELECT * FROM Article" + " WHERE category = :category")
     fun getArticlesByCategory(category: String): LiveData<List<Article>>
 
     @Transaction
@@ -27,4 +27,7 @@ interface ArticlesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertArticles(articles:List<Article>)
+
+    @Query("SELECT * FROM Article ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomArticle():Article
 }

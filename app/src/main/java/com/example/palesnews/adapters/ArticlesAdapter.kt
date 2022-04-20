@@ -37,6 +37,8 @@ class ArticlesAdapter() : RecyclerView.Adapter<ArticlesAdapter.ArticlesViewHolde
                     "$readingTime ${context.getString(R.string.read_time)} | ${article.publishedAt}"
             }
         }
+
+        fun getTime() : String = binding.tvArticleTime.text.toString()
     }
 
     private val diffCallBack = object : DiffUtil.ItemCallback<Article>() {
@@ -65,9 +67,15 @@ class ArticlesAdapter() : RecyclerView.Adapter<ArticlesAdapter.ArticlesViewHolde
     override fun onBindViewHolder(holder: ArticlesViewHolder, position: Int) {
         val article = differ.currentList[position]
         holder.bind(article)
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(article,holder.getTime())
+        }
     }
 
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
+    var onItemClick: ((Article, String) -> Unit)? = null
 }

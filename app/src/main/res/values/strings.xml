@@ -10,4 +10,5 @@
     <string name="choose_topics">Choose your \n topics</string>
     <string name="featured_article">Featured Article</string>
     <string name="top_headlines">Top Headlines</string>
+    <string name="read_more">,Read more...</string>
 </resources>

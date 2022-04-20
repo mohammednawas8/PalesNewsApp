@@ -11,8 +11,13 @@
     <dimen name="category_button_width">140dp</dimen>
     <dimen name="category_button_height">60dp</dimen>
     <dimen name="text_choose_topics">40sp</dimen>
-    <dimen name="categories_top_margin">20dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
     <dimen name="featured_article_height">270dp</dimen>
     <dimen name="featured_article_corner">45dp</dimen>
+    <dimen name="margin_15dp">15dp</dimen>
+    <dimen name="text_article_title">30sp</dimen>
+    <dimen name="browse_icon_height">45dp</dimen>
+    <dimen name="padding_content_text">70dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
 
 </resources>
