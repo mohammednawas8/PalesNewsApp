@@ -3,11 +3,10 @@ package com.example.palesnews.repositories
 import com.example.palesnews.data.database.ArticlesDatabase
 import com.example.palesnews.data.pojo.Article
 import com.example.palesnews.data.remote.NewsApi
-import javax.inject.Inject
 
 class ArticlesRepository (
     private val newsApi: NewsApi,
-    private val articlesDatabase: ArticlesDatabase
+    articlesDatabase: ArticlesDatabase
 ) {
     private val articlesDao = articlesDatabase.articlesDao
 
@@ -38,14 +37,16 @@ class ArticlesRepository (
         article: Article
     ) = articlesDao.deleteArticle(article)
 
-    suspend fun deleteAllArticles() = articlesDao.deleteAllArticles()
+    suspend fun deleteAllArticles() = articlesDao.deleteTopHeadlineArticles()
+
+    suspend fun deleteCategoryArticles(category:String) = articlesDao.deleteCategoryArticles(category)
 
     fun getAllArticles() = articlesDao.getAllArticles()
 
-    fun getArticlesByCategory (
+    suspend fun getArticlesByCategory (
         category:String
     ) = articlesDao.getArticlesByCategory(category)
 
-    suspend fun getRandomArticle() = articlesDao.getRandomArticle()
+    suspend fun getRandomArticle():Article? = articlesDao.getRandomArticle()
 
 }

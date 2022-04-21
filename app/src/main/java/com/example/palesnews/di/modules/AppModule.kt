@@ -8,6 +8,7 @@ import com.example.palesnews.R
 import com.example.palesnews.data.database.ArticlesDatabase
 import com.example.palesnews.data.remote.NewsApi
 import com.example.palesnews.helper.ArticlesCache
+import com.example.palesnews.helper.Navigation
 import com.example.palesnews.repositories.ArticlesRepository
 import com.example.palesnews.util.Constants.Companion.BASE_URL
 import dagger.Module
@@ -60,5 +61,9 @@ object AppModule {
             .error(R.drawable.error_loading)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
     )
+
+    @Provides
+    @Singleton
+    fun provideNavigation() = Navigation()
 
 }

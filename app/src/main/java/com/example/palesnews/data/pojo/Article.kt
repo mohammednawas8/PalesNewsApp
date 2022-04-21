@@ -18,5 +18,5 @@ data class Article(
     @PrimaryKey(autoGenerate = false)
     val url: String,
     val urlToImage: String?,
-    val category: String?
+    var category: String?
 ) : Parcelable

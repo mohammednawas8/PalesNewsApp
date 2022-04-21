@@ -24,8 +24,8 @@ class ArticlesAdapter() : RecyclerView.Adapter<ArticlesAdapter.ArticlesViewHolde
 
         @SuppressLint("SetTextI18n")
         fun bind(article: Article) {
-            //Generate random number between 1 to 7 minutes for the read time since the api doesn't provide it to us
-            val readingTime = Random.nextInt(1, 5).toString()
+            //Simulate a random number for the reading time based on content
+            val readingTime = article.content?.length?.div(100)
             binding.apply {
                 Glide.with(context)
                     .load(article.urlToImage)

@@ -17,6 +17,9 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_topHeadlineNewsFragment_to_categoryArticlesFragment"
+            app:destination="@id/categoryArticlesFragment" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
@@ -28,5 +31,17 @@
             app:argType="com.example.palesnews.data.pojo.Article" />
         <argument android:name="time"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryArticlesFragment"
+        android:name="com.example.palesnews.ui.fragments.CategoryArticlesFragment"
+        android:label="CategoryArticlesFragment"
+        tools:layout="@layout/fragment_category_articles">
+        <argument
+            android:name="category"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_categoryArticlesFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
     </fragment>
 </navigation>

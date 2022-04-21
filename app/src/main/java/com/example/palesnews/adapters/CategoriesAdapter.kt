@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.palesnews.R
 import com.example.palesnews.databinding.CategoryItemBinding
 import com.example.palesnews.util.Constants.Companion.BUSINESS
-import com.example.palesnews.util.Constants.Companion.GENERAL
+import com.example.palesnews.util.Constants.Companion.ENTERTAINMENT
 import com.example.palesnews.util.Constants.Companion.SINCE
 import com.example.palesnews.util.Constants.Companion.SPORTS
-import javax.inject.Inject
 
 class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHolder>() {
 
@@ -41,10 +40,10 @@ class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoriesVie
                     return
                 }
 
-                GENERAL -> {
+                ENTERTAINMENT -> {
                     changeButtonTextAndColor(
                         binding.btnCategory,
-                        context.getText(R.string.general),
+                        context.getText(R.string.entertainment),
                         context.resources.getColor(R.color.g_orange)
                     )
                     return

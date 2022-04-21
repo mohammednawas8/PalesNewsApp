@@ -16,10 +16,11 @@ import com.example.palesnews.adapters.ArticlesAdapter
 import com.example.palesnews.adapters.CategoriesAdapter
 import com.example.palesnews.data.pojo.Article
 import com.example.palesnews.databinding.FragmentTopHeadlineNewsBinding
+import com.example.palesnews.helper.Navigation
 import com.example.palesnews.helper.VerticalRecyclerViewDecoration
 import com.example.palesnews.helper.ResourceResultHandler
 import com.example.palesnews.util.Constants.Companion.BUSINESS
-import com.example.palesnews.util.Constants.Companion.GENERAL
+import com.example.palesnews.util.Constants.Companion.ENTERTAINMENT
 import com.example.palesnews.util.Constants.Companion.SINCE
 import com.example.palesnews.util.Constants.Companion.SPORTS
 import com.example.palesnews.viewModels.NewsViewModel
@@ -31,10 +32,12 @@ import kotlin.random.Random
 class TopHeadlineNewsFragment : Fragment() {
     @Inject
     lateinit var glide: RequestManager
+    @Inject
+    lateinit var navigation: Navigation
     val TAG = "TopHeadlineNewsFragment"
     private lateinit var binding: FragmentTopHeadlineNewsBinding
     private val viewModel by activityViewModels<NewsViewModel>()
-    lateinit var topHeadlineResultHandler: ResourceResultHandler
+    lateinit var topHeadlinesProgressHandler: ResourceResultHandler
     private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var articlesAdapter: ArticlesAdapter
 
@@ -53,22 +56,21 @@ class TopHeadlineNewsFragment : Fragment() {
         setupCategoriesRecyclerview()
         setupArticlesRecyclerview()
 
-
-        topHeadlineResultHandler = ResourceResultHandler(
+        topHeadlinesProgressHandler = ResourceResultHandler(
             onLoading = {
                 Log.d(TAG, "TopHeadLines:Loading...")
                 showLoading()
             },
 
-            onSuccess = {
+            onSuccess = { articlesList ->
                 Log.d(TAG, "TopHeadLines:Success :)")
                 hideLoading()
                 hidePagingLoading()
 
             },
 
-            onError = {
-                Log.e(TAG, "TopHeadLines:Error :( ${it.toString()}")
+            onError = { error ->
+                Log.e(TAG, "TopHeadLines:Error :( $error")
                 hideLoading()
                 hidePagingLoading()
 
@@ -76,7 +78,7 @@ class TopHeadlineNewsFragment : Fragment() {
         )
 
         viewModel.topHeadlineNewsProgress.observe(viewLifecycleOwner) { result ->
-            topHeadlineResultHandler.handleResult(result)
+            topHeadlinesProgressHandler.handleResult(result)
         }
 
         viewModel.topHeadlineNews.observe(viewLifecycleOwner) { articles ->
@@ -99,31 +101,44 @@ class TopHeadlineNewsFragment : Fragment() {
         )
 
         binding.imgFeaturedArticle.setOnClickListener {
-            val readingTime = Random.nextInt(1, 5).toString()
-            val time = "$readingTime ${requireContext().getString(R.string.read_time)} | ${featuredArticle?.publishedAt}"
-            navigateTo(R.id.action_topHeadlineNewsFragment_to_articleFragment, featuredArticle,time)
+            //Generate random number between 1 to 7 minutes for the read time since the api doesn't provide it to us
+            val readingTime = Random.nextInt(1, 7).toString()
+            val time =
+                "$readingTime ${requireContext().getString(R.string.read_time)} | ${featuredArticle?.publishedAt}"
+            navigation.navigateTo(
+                findNavController(),
+                R.id.action_topHeadlineNewsFragment_to_articleFragment,
+                featuredArticle,
+                time
+            )
         }
 
         articlesAdapter.onItemClick = { article, time ->
-            navigateTo(R.id.action_topHeadlineNewsFragment_to_articleFragment,article,time)
+            navigation.navigateTo(
+                findNavController(),
+                R.id.action_topHeadlineNewsFragment_to_articleFragment,
+                article,
+                time
+            )
+        }
+
+        categoriesAdapter.onItemClick = { category ->
+            navigation.navigateTo(
+                findNavController(),
+                R.id.action_topHeadlineNewsFragment_to_categoryArticlesFragment,
+                category
+            )
         }
 
     }
 
-    private fun navigateTo(actionId: Int, article: Article?,time:String) = article?.let {
-        val bundle = Bundle().apply {
-            putParcelable("article", it)
-            putString("time", time)
-        }
-        findNavController().navigate(actionId, bundle)
-    }
 
     private fun showPagingLoading() {
-        binding.progressbarHeadlineNews.visibility = View.VISIBLE
+        binding.progressbarHeadlineNewsPaging.visibility = View.VISIBLE
     }
 
     private fun hidePagingLoading() {
-        binding.progressbarHeadlineNews.visibility = View.GONE
+        binding.progressbarHeadlineNewsPaging.visibility = View.GONE
     }
 
     private fun setupFeaturedArticle(featuredArticle: Article) {
@@ -160,11 +175,10 @@ class TopHeadlineNewsFragment : Fragment() {
 
     private fun getCategoriesList(): MutableList<String> {
         return mutableListOf(
-            GENERAL,
+            ENTERTAINMENT,
             BUSINESS,
             SINCE,
             SPORTS
         )
-
     }
 }

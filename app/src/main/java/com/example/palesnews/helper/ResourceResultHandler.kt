@@ -15,7 +15,6 @@ class ResourceResultHandler(
         when (result) {
             is Resource.Loading -> {
                 onLoading()
-                Log.d("tests","Loading...")
                 return
             }
 
