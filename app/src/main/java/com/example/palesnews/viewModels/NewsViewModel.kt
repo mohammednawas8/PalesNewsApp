@@ -21,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsViewModel @Inject constructor(
     private val articlesRepository: ArticlesRepository,
-    private val articlesCache: ArticlesCache
+    private val articlesCache: ArticlesCache,
+    private val countryCode: String
 ) : ViewModel() {
 
     val topHeadlineNews = articlesRepository.getAllArticles()
@@ -38,6 +39,9 @@ class NewsViewModel @Inject constructor(
     private val _categoryNews = MutableLiveData<List<Article>>()
     val categoryNews: LiveData<List<Article>> = _categoryNews
 
+    private val _searchNews = MutableLiveData<Resource<List<Article>>>()
+    val searchNews: LiveData<Resource<List<Article>>> = _searchNews
+
     private var topHeadlineNewsPage = 1
     private var shouldPagingHeadlineNews = true
 
@@ -45,16 +49,17 @@ class NewsViewModel @Inject constructor(
     private var shouldPagingCategoryNews = true
 
     init {
-        fetchTopHeadlineNews("us", topHeadlineNewsPage)
-        fetchFeaturedArticle()
+        fetchTopHeadlineNews(countryCode, topHeadlineNewsPage)
+        getFeaturedArticle()
     }
 
     //This function will pick a random meal from the articles saved into the local database and consider it as a Featured Article
     //That's not how you should do it in a real app. but since the REST API doesn't provide us a Featured Article
     //i will use this function. but featuredArticle will be null when we run the app for the fist time
     //because 0 articles are stored in the database.
-    private fun fetchFeaturedArticle() = viewModelScope.launch {
+    private fun getFeaturedArticle() = viewModelScope.launch {
         val featuredArticle = articlesRepository.getRandomArticle()
+        Log.d("test",featuredArticle.toString())
         featuredArticle?.let { _featuredArticle.postValue(it) }
     }
 
@@ -135,7 +140,7 @@ class NewsViewModel @Inject constructor(
             if (shouldPagingCategoryNews) {
                 _categoryNewsProgress.postValue(Resource.Loading())
                 val response =
-                    articlesRepository.fetchNewsByCategory("us", categoryNewsPage, category)
+                    articlesRepository.fetchNewsByCategory(countryCode, categoryNewsPage, category)
                 handleCategoryNews(response, category)
 
             } else
@@ -157,7 +162,7 @@ class NewsViewModel @Inject constructor(
                 }
 
                 //Handle the first time we open the category
-                if(_categoryNews.value.isNullOrEmpty())
+                if (_categoryNews.value.isNullOrEmpty())
                     _categoryNews.postValue(articles)
 
                 oldCategoryArticles = oldCategoryArticles.plus(articles) as ArrayList<Article>
@@ -168,6 +173,42 @@ class NewsViewModel @Inject constructor(
         else {
             _categoryNewsProgress.postValue(Resource.Error(response.message()))
         }
+    }
+
+    fun refreshTopHeadlineNews(country: String) {
+        topHeadlineNewsPage = 1
+        shouldPagingHeadlineNews = true
+        oldTopHeadlineArticles = ArrayList()
+        fetchTopHeadlineNews(country, topHeadlineNewsPage)
+    }
+
+    fun searchNews(searchQuery: String) = viewModelScope.launch {
+        try {
+            val response = articlesRepository.searchNews(searchQuery)
+            handleSearchResponse(response)
+        } catch (e: Exception) {
+            _searchNews.postValue(Resource.Error(e.message.toString()))
+        }
+    }
+
+    private fun handleSearchResponse(response: Response<NewsResponse>) {
+        if (response.isSuccessful) {
+            response.body()?.let { newsResponse ->
+                val articles = newsResponse.articles
+                _searchNews.postValue(Resource.Success(articles))
+            }
+        } else
+            _searchNews.postValue(Resource.Error(response.message()))
+    }
+
+
+    fun refreshFeaturedArticle() = getFeaturedArticle()
+
+    fun refreshNewsByCategory(category: String) {
+        categoryNewsPage = 1
+        shouldPagingCategoryNews = true
+        fetchNewsByCategory(category)
+        oldCategoryArticles = ArrayList()
     }
 
 }

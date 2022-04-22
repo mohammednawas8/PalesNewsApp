@@ -1,6 +1,7 @@
 package com.example.palesnews.di.modules
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -11,6 +12,7 @@ import com.example.palesnews.helper.ArticlesCache
 import com.example.palesnews.helper.Navigation
 import com.example.palesnews.repositories.ArticlesRepository
 import com.example.palesnews.util.Constants.Companion.BASE_URL
+import com.example.palesnews.util.Constants.Companion.COUNTRY_CODE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,7 +58,8 @@ object AppModule {
     @Singleton
     fun provideGlide(
         @ApplicationContext context: Context
-    ) = Glide.with(context).applyDefaultRequestOptions(RequestOptions()
+    ) = Glide.with(context).applyDefaultRequestOptions(
+        RequestOptions()
             .placeholder(R.drawable.loading)
             .error(R.drawable.error_loading)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
@@ -65,5 +68,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideNavigation() = Navigation()
+
+    @Provides
+    @Singleton
+    fun provideCountryCode(
+        @ApplicationContext context: Context
+    ) = context.getSharedPreferences(COUNTRY_CODE, MODE_PRIVATE).getString(COUNTRY_CODE, "us")
+        ?: "us"
 
 }

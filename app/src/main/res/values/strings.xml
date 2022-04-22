@@ -11,4 +11,11 @@
     <string name="featured_article">Featured Article</string>
     <string name="top_headlines">Top Headlines</string>
     <string name="read_more">,Read more...</string>
+    <string name="search_hint">Search News ...</string>
+    <string name="search">Search</string>
+    <string name="results">Results</string>
+    <string name="usa">USA</string>
+    <string name="germany">Germany</string>
+    <string name="russia">Russia</string>
+    <string name="egypt">Egypt</string>
 </resources>

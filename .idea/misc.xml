@@ -6,13 +6,18 @@
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/drawable/article_image_text_bacground.xml" value="0.2595" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/drawable/category_button_background.xml" value="0.235" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/drawable/line.xml" value="0.235" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/drawable/search_box_bacground.xml" value="0.2265" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/font/m.xml" value="0.284375" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/activity_main.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/activity_news.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/alertdialog_country_picker.xml" value="0.20854700854700856" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/article_item.xml" value="0.20854700854700856" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/category_item.xml" value="0.264" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/countries_picker.xml" value="0.10726495726495726" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/dialog_countries_picker.xml" value="0.264" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/fragment_article.xml" value="0.2" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/fragment_category_articles.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/fragment_search.xml" value="0.20854700854700856" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/fragment_top_headline_news.xml" value="0.264" />
         <entry key="..\:/Users/mo/AndroidStudioProjects/PalesNews/app/src/main/res/layout/top_headline_news_item.xml" value="0.264" />
       </map>

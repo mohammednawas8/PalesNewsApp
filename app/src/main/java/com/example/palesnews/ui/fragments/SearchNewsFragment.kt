@@ -1,36 +1,42 @@
 package com.example.palesnews.ui.fragments
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.palesnews.R
 import com.example.palesnews.adapters.ArticlesAdapter
-import com.example.palesnews.databinding.FragmentCategoryArticlesBinding
+import com.example.palesnews.databinding.FragmentSearchBinding
 import com.example.palesnews.helper.Navigation
 import com.example.palesnews.helper.ResourceResultHandler
 import com.example.palesnews.helper.VerticalRecyclerViewDecoration
+import com.example.palesnews.util.Constants
 import com.example.palesnews.viewModels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CategoryArticlesFragment : Fragment() {
+class SearchNewsFragment : Fragment() {
     @Inject
     lateinit var navigation: Navigation
-    val TAG = "CategoryArticlesFragmen"
-    private lateinit var categoryArticlesHandler: ResourceResultHandler
-    private lateinit var binding: FragmentCategoryArticlesBinding
-    private lateinit var articlesAdapter: ArticlesAdapter
+    val TAG = "SearchNewsFragment"
+    private lateinit var searchResultHandler: ResourceResultHandler
+    private lateinit var binding: FragmentSearchBinding
+    private lateinit var searchAdapter: ArticlesAdapter
     val viewModel by viewModels<NewsViewModel>()
-    val args by navArgs<CategoryArticlesFragmentArgs>()
 
 
     override fun onCreateView(
@@ -38,92 +44,68 @@ class CategoryArticlesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCategoryArticlesBinding.inflate(inflater)
+        binding = FragmentSearchBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val category = args.category
 
         setupRecyclerView()
-        binding.tvCategory.text = category
-        viewModel.fetchNewsByCategory(category)
 
-        categoryArticlesHandler = ResourceResultHandler(
+        val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        binding.edSearchBox.requestFocus()
+        binding.edSearchBox.isCursorVisible = true
+
+        searchResultHandler = ResourceResultHandler(
             onLoading = {
-                Log.d(TAG, "CategoryArticles: Loading ...")
-                showLoading()
+                Log.d(TAG, "SearchArticles Loading ...")
             },
-            onSuccess = { articles ->
-                Log.d(TAG, "CategoryArticles: Success :) ${articles.size}")
-                hideLoading()
+            onSuccess = { searchArticles ->
+                searchAdapter.differ.submitList(searchArticles)
+                Log.d(TAG, "SearchArticles Success :) ${searchArticles.size}")
             },
             onError = { message ->
-                Log.e(TAG, "CategoryArticles: Error :( $message")
-                hideLoading()
+                Log.e(TAG, "SearchArticles Error :( $message")
             }
         )
-        viewModel.categoryNewsProgress.observe(viewLifecycleOwner) { result ->
-            categoryArticlesHandler.handleResult(result)
+
+
+        viewModel.searchNews.observe(viewLifecycleOwner) { result ->
+            searchResultHandler.handleResult(result)
         }
 
-        viewModel.categoryNews.observe(viewLifecycleOwner) { articles ->
-            articlesAdapter.differ.submitList(articles)
-        }
-
-        articlesAdapter.onItemClick = { article, time ->
+        searchAdapter.onItemClick = { article, time ->
             navigation.navigateTo(
                 findNavController(),
-                R.id.action_categoryArticlesFragment_to_articleFragment,
+                R.id.action_searchNewsFragment_to_articleFragment,
                 article,
                 time
             )
         }
 
-        //Paging
-        binding.rvCategoryArticles.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-
-                    if (!recyclerView.canScrollVertically(1) && dy != 0) {
-                        viewModel.fetchNewsByCategory(category)
-                        showLoading()
-                    }
-                }
+        //Searching
+        var job: Job? = null
+        binding.edSearchBox.addTextChangedListener { searchQuery ->
+            job?.cancel()
+            job = lifecycleScope.launch {
+                delay(Constants.SEARCH_DELAY)
+                viewModel.searchNews(searchQuery.toString())
             }
-        )
-
-        binding.refreshArticles.setOnRefreshListener {
-            viewModel.refreshNewsByCategory(category)
         }
 
     }
 
 
-    private fun hideLoading() {
-        binding.progressbarCategoryNewsPaging.visibility = View.INVISIBLE
-        binding.refreshArticles.isRefreshing = false
-    }
-
-    private fun showLoading() {
-        binding.progressbarCategoryNewsPaging.visibility = View.VISIBLE
-    }
-
     private fun setupRecyclerView() {
-        articlesAdapter = ArticlesAdapter()
-        binding.rvCategoryArticles.apply {
+        searchAdapter = ArticlesAdapter()
+        binding.rvSearch.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = articlesAdapter
+            adapter = searchAdapter
             addItemDecoration(VerticalRecyclerViewDecoration(60))
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        //Reset page number
-        viewModel.categoryNewsPage = 1
-    }
 }

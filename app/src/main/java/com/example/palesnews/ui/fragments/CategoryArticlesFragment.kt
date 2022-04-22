@@ -16,6 +16,7 @@ import com.example.palesnews.adapters.ArticlesAdapter
 import com.example.palesnews.databinding.FragmentCategoryArticlesBinding
 import com.example.palesnews.helper.Navigation
 import com.example.palesnews.helper.ResourceResultHandler
+import com.example.palesnews.helper.VerticalRecyclerViewDecoration
 import com.example.palesnews.viewModels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -57,7 +58,6 @@ class CategoryArticlesFragment : Fragment() {
             },
             onSuccess = { articles ->
                 Log.d(TAG, "CategoryArticles: Success :) ${articles.size}")
-
                 hideLoading()
             },
             onError = { message ->
@@ -96,16 +96,20 @@ class CategoryArticlesFragment : Fragment() {
             }
         )
 
-    }
+        binding.refreshArticles.setOnRefreshListener {
+            viewModel.refreshNewsByCategory(category)
+        }
 
+    }
 
 
     private fun hideLoading() {
-        binding.progressbarCategoryNews.visibility = View.INVISIBLE
+        binding.progressbarCategoryNewsPaging.visibility = View.INVISIBLE
+        binding.refreshArticles.isRefreshing = false
     }
 
     private fun showLoading() {
-        binding.progressbarCategoryNews.visibility = View.VISIBLE
+        binding.progressbarCategoryNewsPaging.visibility = View.VISIBLE
     }
 
     private fun setupRecyclerView() {
@@ -113,6 +117,7 @@ class CategoryArticlesFragment : Fragment() {
         binding.rvCategoryArticles.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = articlesAdapter
+            addItemDecoration(VerticalRecyclerViewDecoration(60))
         }
     }
 

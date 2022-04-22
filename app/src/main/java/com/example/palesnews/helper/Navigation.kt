@@ -30,6 +30,13 @@ class Navigation {
         }
         navController.navigate(destinationId, bundle)
     }
+
+    fun navigateTo(
+        navController: NavController,
+        destinationId: Int,
+    ) {
+        navController.navigate(destinationId)
+    }
 }
 
 

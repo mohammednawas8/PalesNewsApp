@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nestedScrollView_headline"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/g_app_background"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:id="@+id/refresh_top_headline_news"
+    android:animateLayoutChanges="true">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView_headline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,6 +40,16 @@
             app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/progressbar" />
 
+        <ImageView
+            android:id="@+id/img_country"
+            android:layout_width="@dimen/country_icon"
+            android:layout_height="@dimen/country_icon"
+            app:layout_constraintBottom_toBottomOf="@id/tv_choose_your_topics"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            android:src="@drawable/ic_country"/>
+
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categories"
             android:layout_width="0dp"
@@ -46,6 +63,24 @@
             tools:listitem="@layout/category_item" />
 
         <TextView
+            android:id="@+id/tv_search_box"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/search_box_height"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/rv_categories"
+            android:layout_marginTop="@dimen/margin_20dp"
+            android:background="@drawable/search_box_bacground"
+            android:paddingStart="@dimen/margin_15dp"
+            android:paddingEnd="@dimen/margin_15dp"
+            style="@style/TextViewStyle"
+            android:hint="@string/search_hint"
+            app:drawableTint="@color/g_content_text"
+            app:drawableEndCompat="@drawable/ic_search"
+            android:textColorHint="@color/g_content_text"
+            android:gravity="start|center"/>
+
+        <TextView
             android:id="@+id/tv_featured_article"
             style="@style/TextViewStyle"
             android:layout_width="wrap_content"
@@ -53,7 +88,9 @@
             android:layout_marginTop="@dimen/margin_20dp"
             android:text="@string/featured_article"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/rv_categories" />
+            app:layout_constraintTop_toBottomOf="@id/tv_search_box" />
+
+
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/img_featured_article"
@@ -138,4 +175,5 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.96" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -34,5 +34,5 @@ interface NewsApi {
         @Query("q") searchQuery:String,
         @Query("sortBy") sortBy:String = SORT_BY_POPULARITY,
         @Query("apiKey") apiKey:String = API_KEY
-    )
+    ):Response<NewsResponse>
 }
