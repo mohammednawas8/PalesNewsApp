@@ -1,5 +1,5 @@
 # PalesNewsApp
-- PalesNews is an MVVM app applies the best practices principles that built for android platform using kotlin as programming language.
+- PalesNews is an MVVM app applies the best practices and principles that built for android platform using kotlin as programming language.
 - fetches news from an API https://newsapi.org/ and cache the results then show them in a RecyclerView.
 - supports offline news browsing.
 - supports paging.
